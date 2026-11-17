@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  qualite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Installer les dependances
+        run: npm ci
+
+      - name: Verifier le formatage
+        run: npm run format
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tests unitaires et d'integration
+        run: npm test
+
+      - name: Build de production
+        run: npm run build
